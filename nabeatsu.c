@@ -33,7 +33,8 @@ int main(int argc, char** argv) {
     int num = atoi(argv[1]);
 
     // 整数が 3 で割り切れる または 文字列に 3 を含む場合「num!!!」と出力する
-    if (num % 3 == 0 || strstr(argv[1], "3") != NULL) {
+    // 0 も 3 で割り切れてしまうので評価しておく
+    if ((num != 0 && num % 3 == 0) || strstr(argv[1], "3") != NULL) {
         printf("%d!!!\n", num);
     } else {
         printf("%d\n", num);
