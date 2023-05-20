@@ -18,6 +18,8 @@ $ ./nabeatsu.out 3
 3!!!
 $ ./nabeatsu.out 12
 12!!!
+$ ./nabeatsu.out 1234
+1234!!!
 ```
 
 ## 参考
