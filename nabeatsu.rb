@@ -3,30 +3,34 @@
 # 検証エラーの際に出力する文字列を初期化
 EXAMPLE = "\nexample:\n  $ ruby nabeatsu 12"
 
-# 配列の要素数が 1 以外だった場合は処理を終了するメソッド
-def exit_when_length_other_than_one(argv)
-  if argv.length == 0
-    puts "コマンドライン引数へ与えられた整数が 3 で割り切れる または 3 を含む桁が存在する場合 [num]!!! と出力します。"
-    puts EXAMPLE
-    exit
-  elsif argv.length != 1
-    puts "コマンドライン引数はひとつだけ指定して実行してください"
+# 与えられた配列の数が 1 以外だった場合は処理を終了するメソッド
+def validate_args_number(given_args_number)
+  if given_args_number.length != 1
+    puts "[ERROR] wrong number of arguments (given #{given_args_number.length}, expected 1)"
     puts EXAMPLE
     exit
   end
 end
 
-# 引数が 0 以下の場合は処理を終了するメソッド
-# 引数が 0 以下だった場合の他、引数の最初の文字が数値でなかった場合が対象となる
-def exit_when_under_zero(num)
+# 与えられた引数が整数でない場合は処理を終了するメソッド
+def is_numeric(num)
+  if !num.is_a?(Integer)
+    puts "[ERROR] argument is not Integer"
+    puts EXAMPLE
+    exit
+  end
+end
+
+# 与えられた引数が 0 以下の場合は処理を終了するメソッド
+def validate_under_zero(num)
   if num <= 0
-    puts "コマンドライン引数は 1 以上の整数を指定して実行してください"
+    puts "[ERROR] argument is under zero. Please give a positive number"
     puts EXAMPLE
     exit
   end
 end
 
-# 桁に 3 を含むか検査するメソッド
+# 桁に 3 を含むか評価するメソッド
 def has_three_digits(num)
   # num の桁数を計算して初期化
   # log10 (絶対値) の結果を整数に変換後 1 を加えると桁数となる
@@ -39,8 +43,9 @@ def has_three_digits(num)
   # 例) number_of_digits が 4 の場合、1000 を weight へ代入する
   weight = 10**(number_of_digits - 1)
 
+  # 桁数分だけ評価を繰り返す
   number_of_digits.times {
-    # check_num を桁の重みで割り、商が 3 であれば true を返してメソッドの処理を終了する
+    # num を桁の重みで割り、商が 3 であれば true を返してメソッドの処理を終了する
     # 商が 3 でなければ桁と重みをひとつ減らして次のループへ移る
     #
     # 例)
@@ -64,22 +69,40 @@ def has_three_digits(num)
     end
   }
 
-  # ループを抜けた場合は false を返す
+  # 3 を含む桁が存在せずループを抜けた場合は false を返す
   return false
 end
 
-# コマンドライン引数が 1 つ以外だった場合は処理を終了する
-exit_when_length_other_than_one(ARGV)
+# 整数が 3 で割り切れる または いずれかの桁に 3 を含む場合 true を返すメソッド
+def is_nabeatsu(num)
+  # 整数が 3 で割り切れる または いずれかの桁に 3 を含む場合 true を出力する
+  if num % 3 == 0 || has_three_digits(num)
+    return true
+  else
+    return false
+  end
+end
 
-# 文字列として受け取った引数を整数へ変換する
-num = ARGV[0].to_i
+# このファイルが直接実行された場合にのみ実行する処理
+if __FILE__ == $0
+  # 与えられたコマンドライン引数の数が 1 以外だった場合は処理を終了する
+  validate_args_number(ARGV)
 
-# 変換後の値が 0 以下 もしくは 引数の最初の文字が数値でなかった場合は処理を終了する
-exit_when_under_zero(num)
+  # 文字列として受け取ったコマンドライン引数を整数へ変換する
+  num = ARGV[0].to_i
 
-# 整数が 3 で割り切れる または いずれかの桁に 3 を含む場合「num!!!」と出力する
-if num % 3 == 0 || has_three_digits(num)
-  puts "#{num}!!!"
-else
-  puts "#{num}"
+  # 与えられた引数が整数でない場合は処理を終了する
+  # validate_integer(num)
+
+  # 与えられた引数が 0 以下の場合は処理を終了する
+  # 引数の最初の文字が数値でなかった場合も含む (to_i での変換時に文字列は 0 へ変換されるため)
+  validate_under_zero(num)
+
+  # is_nabeatsu メソッドを実行する
+  # true の場合は「num!!!」と出力する
+  if is_nabeatsu(num)
+    puts "#{num}!!!"
+  else
+    puts "#{num}"
+  end
 end
