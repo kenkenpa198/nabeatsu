@@ -15,6 +15,7 @@ int main(int argc, char** argv) {
     }
 
     // 引数に与えられた文字列が数値であるか検証する
+    // 配列の要素をひとつずつ isdigit() で検査し false が返った時点で終了する
     int argvLen = strlen(argv[1]);
     for (int i = 0; i < argvLen; i++) {
         if (!isdigit(argv[1][i])) {
