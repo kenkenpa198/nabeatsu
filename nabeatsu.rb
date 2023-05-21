@@ -3,28 +3,27 @@
 # 検証エラーの際に出力する文字列を初期化
 EXAMPLE = "\nexample:\n  $ ruby nabeatsu 12"
 
-# 引数の数を検証する
-if ARGV.length == 0
-  puts "引数へ与えられた整数が 3 で割り切れる または いずれかの桁に 3 を含む場合 [num]!!! と出力します。"
-  puts EXAMPLE
-  exit
-elsif ARGV.length != 1
-  puts "コマンドライン引数はひとつだけ指定して実行してください"
-  puts EXAMPLE
-  exit
+# 配列の要素数が 1 以外だった場合は処理を終了するメソッド
+def exit_when_length_other_than_one(argv)
+  if argv.length == 0
+    puts "コマンドライン引数へ与えられた整数が 3 で割り切れる または 3 を含む桁が存在する場合 [num]!!! と出力します。"
+    puts EXAMPLE
+    exit
+  elsif argv.length != 1
+    puts "コマンドライン引数はひとつだけ指定して実行してください"
+    puts EXAMPLE
+    exit
+  end
 end
 
-# 文字列として受け取った引数を整数へ変換する
-num = ARGV[0].to_i
-
-# ～～ ここから num は文字列へ変換禁止縛り ～～
-
-# 0 へ変換された場合はエラーメッセージを返す
-# 引数が 0 だった場合や引数の最初の文字が数値でなかった場合が対象となる
-if num == 0
-  puts "コマンドライン引数は 1 以上の整数を指定して実行してください"
-  puts EXAMPLE
-  exit
+# 引数が 0 以下の場合は処理を終了するメソッド
+# 引数が 0 以下だった場合の他、引数の最初の文字が数値でなかった場合が対象となる
+def exit_when_under_zero(num)
+  if num <= 0
+    puts "コマンドライン引数は 1 以上の整数を指定して実行してください"
+    puts EXAMPLE
+    exit
+  end
 end
 
 # 桁に 3 を含むか検査するメソッド
@@ -68,6 +67,15 @@ def has_three_digits(num)
   # ループを抜けた場合は false を返す
   return false
 end
+
+# コマンドライン引数が 1 つ以外だった場合は処理を終了する
+exit_when_length_other_than_one(ARGV)
+
+# 文字列として受け取った引数を整数へ変換する
+num = ARGV[0].to_i
+
+# 変換後の値が 0 以下 もしくは 引数の最初の文字が数値でなかった場合は処理を終了する
+exit_when_under_zero(num)
 
 # 整数が 3 で割り切れる または いずれかの桁に 3 を含む場合「num!!!」と出力する
 if num % 3 == 0 || has_three_digits(num)
