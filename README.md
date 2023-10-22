@@ -1,5 +1,14 @@
 # nabeatsu
 
+- [Fizz Buzz - Wikipedia](https://ja.wikipedia.org/wiki/Fizz_Buzz)
+
+> ## 関連項目
+>
+> - 世界のナベアツ  
+> 「3の倍数と3のつく数のときだけアホになる」という、Fizz Buzzと同様の考えのギャグを行っている。
+
+これをやってみた。
+
 ## nabeatsu.c
 
 引数として与えられた整数が 3 で割り切れる または 文字列に 3 を含む場合 `[num]!!!` と出力する。
@@ -30,7 +39,6 @@ $ ./nabeatsu.out 1234
 
 ## 参考文献
 
-- [Fizz Buzz - Wikipedia](https://ja.wikipedia.org/wiki/Fizz_Buzz)
 - [力試しにナベアツのような判定をするプログラムを作ろうとしたと… - 人力検索はてな](https://q.hatena.ne.jp/1207585413)
 
     > 例えば351  
